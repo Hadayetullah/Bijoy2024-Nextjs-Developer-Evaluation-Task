@@ -2,17 +2,25 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   const pathname = usePathname();
 
   const [toggleMenu, setToggleMenu] = useState(false);
   const [toggleAuth, setToggleAuth] = useState(false);
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
 
   return (
     <nav className="bg-blue-500 py-4 px-2 sm:px-4 fixed top-0 left-0 w-full z-50">
@@ -30,7 +38,7 @@ const Navbar = () => {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="size-8 text-white flex cursor-pointer sm:hidden"
+              className="size-8 text-white flex sm:hidden"
               onClick={() => setToggleMenu(!toggleMenu)}
             >
               <path
@@ -89,7 +97,7 @@ const Navbar = () => {
                           : ""
                       }`}
                     >
-                      Data
+                      Data List
                     </Link>
                   </li>
                 </>
@@ -148,7 +156,7 @@ const Navbar = () => {
                             : ""
                         }`}
                       >
-                        Data
+                        Data List
                       </Link>
                     </li>
                   </>
@@ -166,7 +174,7 @@ const Navbar = () => {
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="size-8 text-white ml-7 pointer"
+                className="size-8 text-white ml-7 cursor-pointer"
                 onClick={() => setToggleAuth(!toggleAuth)}
               >
                 <path
@@ -179,16 +187,7 @@ const Navbar = () => {
               {toggleAuth && (
                 <ul className="flex flex-col w-full absolute right-0 top-12 bg-white min-w-[140px] max-w-[170px] border border-gray-200 bg-gray-100 rounded rounded-xs shadow-lg">
                   <li className="transition bg-gray-100 p-2 hover:bg-blue-500 rounded hover:border hover:border-white hover:text-white w-full h-full">
-                    <Link
-                      href="/logout"
-                      className={`link ${
-                        pathname === "/logout"
-                          ? "border-b-2 border-gray-400"
-                          : ""
-                      }`}
-                    >
-                      Logout
-                    </Link>
+                    <button onClick={() => signOut()}>Logout</button>
                   </li>
                 </ul>
               )}

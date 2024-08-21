@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -12,6 +12,8 @@ export default function Dashboard() {
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
+    } else if (status === "authenticated") {
+      router.push("/");
     }
   }, [status, router]);
 
