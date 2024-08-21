@@ -8,7 +8,7 @@ export default function DataList() {
   const router = useRouter();
 
   const [data, setData] = useState(null);
-  const [error, setError] = useState("Please wait...");
+  const [error, setError] = useState("");
 
   const getData = async () => {
     try {
